@@ -1,5 +1,5 @@
 import os
-from pivotal_to_sentry.client import RestClient
+from pivotal_to_sentry.rest import RestClient
 
 
 class PivotalClient(RestClient):

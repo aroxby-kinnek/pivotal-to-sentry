@@ -29,7 +29,3 @@ class RestClient(object):
         if response.status_code / 100 != 2:
             self._raise_for_response(response)
         return response
-
-    def json_request(self, url, params=None, data=None, headers=None):
-        resp = self.request(url, params=params, data=data)
-        return resp.json()
