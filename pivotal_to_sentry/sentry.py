@@ -19,7 +19,3 @@ class SentryClient(RestClient):
         headers['Authorization'] = 'Bearer {}'.format(self.auth_token)
         return params, data, headers
 
-    def request(self, url, params=None, data=None, headers=None):
-        if not url.endswith('/'):
-            url += '/'
-        return super(SentryClient, self).request(url, params, data, headers)
