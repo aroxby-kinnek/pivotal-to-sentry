@@ -19,10 +19,10 @@ class PivotalClient(RestClient):
         headers['X-TrackerToken'] = self.auth_token
         return params, data, headers
 
-    def paged_json_request(
-            self, url, params=None, data=None, headers=None, offset=0):
+    def paged_json_request(self, url, params=None, data=None, headers=None):
         params = params or {}
-        total = offset + 1  # Prime the loop
+        offset = 0
+        total = 1  # Prime the loop
         while offset < total:
             params['offset'] = offset
             response = self.request(url, params, data, headers)
@@ -38,6 +38,12 @@ class PivotalClient(RestClient):
             yield response.json()
             offset = offset + count
 
+    def all_pages_json(self, url, params=None, data=None, headers=None):
+        lst = []
+        for page in self.paged_json_request(url, params, data, headers):
+            lst += page
+        return lst
+
     def get_projects(self):
         url = 'projects'
         response = self.request(url)
@@ -46,7 +52,4 @@ class PivotalClient(RestClient):
     def get_stories(self, project_id, **filters):
         url = '/projects/{}/stories'.format(project_id)
         params = filters
-        data = []
-        for page in self.paged_json_request(url, params=params):
-            data += page
-        return data
+        return self.all_pages_json(url, params=params)
