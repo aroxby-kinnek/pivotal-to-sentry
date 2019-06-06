@@ -4,7 +4,11 @@ The purpose of this module is to find all unresolved Sentry issues which
 are linked to a resolved pivotal story
 """
 from pivotal_to_sentry.pivotal import PivotalClient
-from pivotal_to_sentry.sentry import SentryClient, annotation_to_pivotal_story
+from pivotal_to_sentry.sentry import (
+    SentryClient,
+    annotation_to_pivotal_story,
+    url_for_issue,
+)
 
 
 def get_sentry_issues_with_pivotal():
@@ -24,7 +28,7 @@ def get_sentry_issues_with_pivotal():
             annotation_to_pivotal_story(tag) for tag in issue['annotations']
         ] for issue in issues
     }
-    return linked
+    return linked, org_slug
 
 
 def filter_pivotal_stories(stories, **filters):
@@ -40,7 +44,7 @@ def filter_pivotal_stories(stories, **filters):
 
 
 def main():
-    issues = get_sentry_issues_with_pivotal()
+    issues, org_slug = get_sentry_issues_with_pivotal()
     stories = {
         story for stories in issues.values() for story in stories
     }
@@ -52,7 +56,11 @@ def main():
         ]
     # Drop issues with no stories
     issues = {k: v for k, v in issues.iteritems() if v}
-    print(issues)
+
+    print 'Stories to resolve:'
+    for issue in issues:
+        url = url_for_issue(org_slug, issue)
+        print url
 
 
 if __name__ == '__main__':

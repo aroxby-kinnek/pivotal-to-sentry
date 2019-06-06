@@ -89,3 +89,10 @@ def annotation_to_pivotal_story(link):
         raise ValueError('Malformed pivotal link tag {}'.format(link))
     else:
         return match.group('story')
+
+
+def url_for_issue(organization_slug, issue_id):
+    url = 'https://sentry.io/organizations/{}/issues/{}/'.format(
+        organization_slug, issue_id
+    )
+    return url
