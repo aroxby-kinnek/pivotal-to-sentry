@@ -27,8 +27,32 @@ def get_sentry_issues_with_pivotal():
     return linked
 
 
+def filter_pivotal_stories(stories, **filters):
+    pivotal = PivotalClient()
+    project_id = pivotal.get_projects()[0]['id']
+    filtered = []
+    for story_id in stories:
+        story = pivotal.get_story(project_id, story_id)
+        results = [story[key] == val for key, val in filters.iteritems()]
+        if all(results):
+            filtered.append(story_id)
+    return filtered
+
+
 def main():
-    get_sentry_issues_with_pivotal()
+    issues = get_sentry_issues_with_pivotal()
+    stories = {
+        story for stories in issues.values() for story in stories
+    }
+    stories = filter_pivotal_stories(stories, current_state='accepted')
+    # Drop unaccepted stories
+    for issue_id in issues.keys():
+        issues[issue_id] = [
+            story for story in issues[issue_id] if story in stories
+        ]
+    # Drop issues with no stories
+    issues = {k: v for k, v in issues.iteritems() if v}
+    print(issues)
 
 
 if __name__ == '__main__':

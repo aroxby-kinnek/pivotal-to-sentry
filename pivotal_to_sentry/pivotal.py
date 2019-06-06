@@ -50,6 +50,11 @@ class PivotalClient(RestClient):
         return response.json()
 
     def get_stories(self, project_id, **filters):
-        url = '/projects/{}/stories'.format(project_id)
+        url = 'projects/{}/stories'.format(project_id)
         params = filters
         return self.all_pages_json(url, params=params)
+
+    def get_story(self, project_id, story_id):
+        url = 'projects/{}/stories/{}'.format(project_id, story_id)
+        response = self.request(url)
+        return response.json()
