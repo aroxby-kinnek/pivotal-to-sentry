@@ -6,7 +6,7 @@ and report those stories 'accepted' on Pivotal but activate on Sentry.
 from pivotal_to_sentry.pivotal import PivotalClient
 
 
-def main():
+def show_accepted_pivotal_stories():
     pivotal = PivotalClient()
     project_id = pivotal.get_all_projects()[0]['id']
     stories = pivotal.get_all_stories(
@@ -15,6 +15,9 @@ def main():
     for story in stories:
         print u'{}: {}'.format(story['id'], story['name'])
 
+
+def main():
+    show_accepted_pivotal_stories()
 
 if __name__ == '__main__':
     main()
