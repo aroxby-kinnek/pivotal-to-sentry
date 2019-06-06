@@ -80,3 +80,12 @@ class SentryClient(RestClient):
         params = {'query': query}
         url = 'projects/{}/{}/issues/'.format(organization, project)
         return self.all_pages_json(url, params=params)
+
+
+def annotation_to_pivotal_story(link):
+    regex = r'<a href="[^"]*">#(?P<story>\d+)</a>'
+    match = re.match(regex, link)
+    if not match:
+        raise ValueError('Malformed pivotal link tag {}'.format(link))
+    else:
+        return match.group('story')
