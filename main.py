@@ -7,16 +7,6 @@ from pivotal_to_sentry.pivotal import PivotalClient
 from pivotal_to_sentry.sentry import SentryClient, annotation_to_pivotal_story
 
 
-def show_accepted_pivotal_stories():
-    pivotal = PivotalClient()
-    project_id = pivotal.get_projects()[0]['id']
-    stories = pivotal.get_stories(
-        project_id, with_label='sentry', with_state='accepted'
-    )
-    for story in stories:
-        print u'{}: {}'.format(story['id'], story['name'])
-
-
 def get_sentry_issues_with_pivotal():
     sentry = SentryClient()
     projects = sentry.get_projects()
