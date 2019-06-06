@@ -8,8 +8,8 @@ from pivotal_to_sentry.pivotal import PivotalClient
 
 def show_accepted_pivotal_stories():
     pivotal = PivotalClient()
-    project_id = pivotal.get_all_projects()[0]['id']
-    stories = pivotal.get_all_stories(
+    project_id = pivotal.get_projects()[0]['id']
+    stories = pivotal.get_stories(
         project_id, with_label='sentry', with_state='accepted'
     )
     for story in stories:

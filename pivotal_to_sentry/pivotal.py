@@ -38,12 +38,12 @@ class PivotalClient(RestClient):
             yield response.json()
             offset = offset + count
 
-    def get_all_projects(self):
+    def get_projects(self):
         url = 'projects'
         response = self.request(url)
         return response.json()
 
-    def get_all_stories(self, project_id, **filters):
+    def get_stories(self, project_id, **filters):
         url = '/projects/{}/stories'.format(project_id)
         params = filters
         data = []
