@@ -74,6 +74,9 @@ class SentryClient(RestClient):
         url = 'projects/'
         return self.all_pages_json(url)
 
-    def get_issues(self, organization, project):
+    def get_issues(self, organization, project, query=None):
+        if query is None:
+            query = ''
+        params = {'query': query}
         url = 'projects/{}/{}/issues/'.format(organization, project)
-        return self.all_pages_json(url)
+        return self.all_pages_json(url, params=params)
