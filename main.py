@@ -25,9 +25,10 @@ def show_linked_sentry_events():
     org_slug = project['organization']['slug']
     proj_slug = project['slug']
 
-    issues = sentry.get_issues(org_slug, proj_slug)
-    for issue in issues:
-        print u'{}: {}'.format(issue['shortId'], issue['title'])
+    # It's a pitty we can't filter for 'annotations' in the API
+    issues = sentry.get_issues(org_slug, proj_slug, query='is:unresolved')
+    issues = [issue for issue in issues if issue.get('annotations')]
+    print len(issues)
 
 
 def main():
