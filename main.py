@@ -9,7 +9,9 @@ from pivotal_to_sentry.pivotal import PivotalClient
 def main():
     pivotal = PivotalClient()
     project_id = pivotal.get_all_projects()[0]['id']
-    stories = pivotal.get_all_stories(project_id, with_label='sentry')
+    stories = pivotal.get_all_stories(
+        project_id, with_label='sentry', with_state='accepted'
+    )
     for story in stories:
         print u'{}: {}'.format(story['id'], story['name'])
 
